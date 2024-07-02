@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Schedule {
+  createdAt     DateTime            @default(now())
+  id            String              @id @default(cuid())
+  scheduledTime DateTime?
+  status        EnumScheduleStatus?
+  updatedAt     DateTime            @updatedAt
+  video         Video?              @relation(fields: [videoId], references: [id])
+  videoId       String?
+}
+
+model Video {
+  createdAt     DateTime         @default(now())
+  description   String?
+  filePath      Json?
+  id            String           @id @default(cuid())
+  scheduledTime DateTime?
+  schedules     Schedule[]
+  status        EnumVideoStatus?
+  title         String?
+  updatedAt     DateTime         @updatedAt
+  userId        String?
+}
+
+enum EnumScheduleStatus {
+  Option1
+}
+
+enum EnumVideoStatus {
+  Option1
+}

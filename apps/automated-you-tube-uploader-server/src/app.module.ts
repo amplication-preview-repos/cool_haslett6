@@ -1,7 +1,5 @@
 import { Module } from "@nestjs/common";
 import { VideoModule } from "./video/video.module";
-import { ScheduleModule } from "./schedule/schedule.module";
-import { NotificationModule } from "./notification/notification.module";
 import { UserModule } from "./user/user.module";
 import { YouTubeModule } from "./YouTube/youtube.module";
 import { HealthModule } from "./health/health.module";
@@ -24,8 +22,6 @@ import { AuthModule } from "./auth/auth.module";
     AuthModule,
     KafkaModule,
     VideoModule,
-    ScheduleModule,
-    NotificationModule,
     UserModule,
     YouTubeModule,
     HealthModule,

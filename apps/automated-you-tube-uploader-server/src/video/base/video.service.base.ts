@@ -10,14 +10,7 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-
-import {
-  Prisma,
-  Video as PrismaVideo,
-  Schedule as PrismaSchedule,
-  User as PrismaUser,
-} from "@prisma/client";
-
+import { Prisma, Video as PrismaVideo } from "@prisma/client";
 import { CreateVideoDto } from "../CreateVideoDto";
 
 export class VideoServiceBase {
@@ -41,25 +34,6 @@ export class VideoServiceBase {
   }
   async deleteVideo(args: Prisma.VideoDeleteArgs): Promise<PrismaVideo> {
     return this.prisma.video.delete(args);
-  }
-
-  async findSchedules(
-    parentId: string,
-    args: Prisma.ScheduleFindManyArgs
-  ): Promise<PrismaSchedule[]> {
-    return this.prisma.video
-      .findUniqueOrThrow({
-        where: { id: parentId },
-      })
-      .schedules(args);
-  }
-
-  async getUser(parentId: string): Promise<PrismaUser | null> {
-    return this.prisma.video
-      .findUnique({
-        where: { id: parentId },
-      })
-      .user();
   }
   async GetAllVideos(args: string): Promise<CreateVideoDto[]> {
     throw new Error("Not implemented");

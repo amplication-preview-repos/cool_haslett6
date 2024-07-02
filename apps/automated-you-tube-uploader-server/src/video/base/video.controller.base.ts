@@ -26,9 +26,6 @@ import { Video } from "./Video";
 import { VideoFindManyArgs } from "./VideoFindManyArgs";
 import { VideoWhereUniqueInput } from "./VideoWhereUniqueInput";
 import { VideoUpdateInput } from "./VideoUpdateInput";
-import { ScheduleFindManyArgs } from "../../schedule/base/ScheduleFindManyArgs";
-import { Schedule } from "../../schedule/base/Schedule";
-import { ScheduleWhereUniqueInput } from "../../schedule/base/ScheduleWhereUniqueInput";
 import { CreateVideoDto } from "../CreateVideoDto";
 
 @swagger.ApiBearerAuth()
@@ -51,30 +48,17 @@ export class VideoControllerBase {
   })
   async createVideo(@common.Body() data: VideoCreateInput): Promise<Video> {
     return await this.service.createVideo({
-      data: {
-        ...data,
-
-        user: data.user
-          ? {
-              connect: data.user,
-            }
-          : undefined,
-      },
+      data: data,
       select: {
         createdAt: true,
         description: true,
         filePath: true,
         id: true,
         scheduledTime: true,
+        schedules: true,
         status: true,
         title: true,
         updatedAt: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
       },
     });
   }
@@ -101,15 +85,10 @@ export class VideoControllerBase {
         filePath: true,
         id: true,
         scheduledTime: true,
+        schedules: true,
         status: true,
         title: true,
         updatedAt: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
       },
     });
   }
@@ -137,15 +116,10 @@ export class VideoControllerBase {
         filePath: true,
         id: true,
         scheduledTime: true,
+        schedules: true,
         status: true,
         title: true,
         updatedAt: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
       },
     });
     if (result === null) {
@@ -175,30 +149,17 @@ export class VideoControllerBase {
     try {
       return await this.service.updateVideo({
         where: params,
-        data: {
-          ...data,
-
-          user: data.user
-            ? {
-                connect: data.user,
-              }
-            : undefined,
-        },
+        data: data,
         select: {
           createdAt: true,
           description: true,
           filePath: true,
           id: true,
           scheduledTime: true,
+          schedules: true,
           status: true,
           title: true,
           updatedAt: true,
-
-          user: {
-            select: {
-              id: true,
-            },
-          },
         },
       });
     } catch (error) {
@@ -234,15 +195,10 @@ export class VideoControllerBase {
           filePath: true,
           id: true,
           scheduledTime: true,
+          schedules: true,
           status: true,
           title: true,
           updatedAt: true,
-
-          user: {
-            select: {
-              id: true,
-            },
-          },
         },
       });
     } catch (error) {
@@ -253,109 +209,6 @@ export class VideoControllerBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @common.Get("/:id/schedules")
-  @ApiNestedQuery(ScheduleFindManyArgs)
-  @nestAccessControl.UseRoles({
-    resource: "Schedule",
-    action: "read",
-    possession: "any",
-  })
-  async findSchedules(
-    @common.Req() request: Request,
-    @common.Param() params: VideoWhereUniqueInput
-  ): Promise<Schedule[]> {
-    const query = plainToClass(ScheduleFindManyArgs, request.query);
-    const results = await this.service.findSchedules(params.id, {
-      ...query,
-      select: {
-        createdAt: true,
-        id: true,
-        scheduledTime: true,
-        status: true,
-        updatedAt: true,
-
-        video: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @common.Post("/:id/schedules")
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "update",
-    possession: "any",
-  })
-  async connectSchedules(
-    @common.Param() params: VideoWhereUniqueInput,
-    @common.Body() body: ScheduleWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      schedules: {
-        connect: body,
-      },
-    };
-    await this.service.updateVideo({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Patch("/:id/schedules")
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "update",
-    possession: "any",
-  })
-  async updateSchedules(
-    @common.Param() params: VideoWhereUniqueInput,
-    @common.Body() body: ScheduleWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      schedules: {
-        set: body,
-      },
-    };
-    await this.service.updateVideo({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Delete("/:id/schedules")
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "update",
-    possession: "any",
-  })
-  async disconnectSchedules(
-    @common.Param() params: VideoWhereUniqueInput,
-    @common.Body() body: ScheduleWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      schedules: {
-        disconnect: body,
-      },
-    };
-    await this.service.updateVideo({
-      where: params,
-      data,
-      select: { id: true },
-    });
   }
 
   @common.Get("/videos")

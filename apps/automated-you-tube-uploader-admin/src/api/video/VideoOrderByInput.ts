@@ -6,8 +6,8 @@ export type VideoOrderByInput = {
   filePath?: SortOrder;
   id?: SortOrder;
   scheduledTime?: SortOrder;
+  schedules?: SortOrder;
   status?: SortOrder;
   title?: SortOrder;
   updatedAt?: SortOrder;
-  userId?: SortOrder;
 };

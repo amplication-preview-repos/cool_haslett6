@@ -1,13 +1,10 @@
 import { InputJsonValue } from "../../types";
-import { ScheduleUpdateManyWithoutVideosInput } from "./ScheduleUpdateManyWithoutVideosInput";
-import { UserWhereUniqueInput } from "../user/UserWhereUniqueInput";
 
 export type VideoUpdateInput = {
   description?: string | null;
   filePath?: InputJsonValue;
   scheduledTime?: Date | null;
-  schedules?: ScheduleUpdateManyWithoutVideosInput;
+  schedules?: InputJsonValue;
   status?: "Option1" | null;
   title?: string | null;
-  user?: UserWhereUniqueInput | null;
 };

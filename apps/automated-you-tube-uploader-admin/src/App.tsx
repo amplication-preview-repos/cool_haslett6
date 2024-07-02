@@ -9,14 +9,6 @@ import { VideoList } from "./video/VideoList";
 import { VideoCreate } from "./video/VideoCreate";
 import { VideoEdit } from "./video/VideoEdit";
 import { VideoShow } from "./video/VideoShow";
-import { ScheduleList } from "./schedule/ScheduleList";
-import { ScheduleCreate } from "./schedule/ScheduleCreate";
-import { ScheduleEdit } from "./schedule/ScheduleEdit";
-import { ScheduleShow } from "./schedule/ScheduleShow";
-import { NotificationList } from "./notification/NotificationList";
-import { NotificationCreate } from "./notification/NotificationCreate";
-import { NotificationEdit } from "./notification/NotificationEdit";
-import { NotificationShow } from "./notification/NotificationShow";
 import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
@@ -53,20 +45,6 @@ const App = (): React.ReactElement => {
           edit={VideoEdit}
           create={VideoCreate}
           show={VideoShow}
-        />
-        <Resource
-          name="Schedule"
-          list={ScheduleList}
-          edit={ScheduleEdit}
-          create={ScheduleCreate}
-          show={ScheduleShow}
-        />
-        <Resource
-          name="Notification"
-          list={NotificationList}
-          edit={NotificationEdit}
-          create={NotificationCreate}
-          show={NotificationShow}
         />
         <Resource
           name="User"

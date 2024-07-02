@@ -26,8 +26,6 @@ import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { CreateUserArgs } from "./CreateUserArgs";
 import { UpdateUserArgs } from "./UpdateUserArgs";
 import { DeleteUserArgs } from "./DeleteUserArgs";
-import { VideoFindManyArgs } from "../../video/base/VideoFindManyArgs";
-import { Video } from "../../video/base/Video";
 import { LoginUserDto } from "../LoginUserDto";
 import { RegisterUserDto } from "../RegisterUserDto";
 import { UserService } from "../user.service";
@@ -134,26 +132,6 @@ export class UserResolverBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Video], { name: "videos" })
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "read",
-    possession: "any",
-  })
-  async findVideos(
-    @graphql.Parent() parent: User,
-    @graphql.Args() args: VideoFindManyArgs
-  ): Promise<Video[]> {
-    const results = await this.service.findVideos(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
   }
 
   @graphql.Mutation(() => LoginUserDto)

@@ -16,16 +16,13 @@ import {
   MaxLength,
   IsOptional,
   IsDate,
-  ValidateNested,
   IsEnum,
 } from "class-validator";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { Type } from "class-transformer";
-import { ScheduleUpdateManyWithoutVideosInput } from "./ScheduleUpdateManyWithoutVideosInput";
 import { EnumVideoStatus } from "./EnumVideoStatus";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 
 @InputType()
 class VideoUpdateInput {
@@ -64,15 +61,13 @@ class VideoUpdateInput {
 
   @ApiProperty({
     required: false,
-    type: () => ScheduleUpdateManyWithoutVideosInput,
   })
-  @ValidateNested()
-  @Type(() => ScheduleUpdateManyWithoutVideosInput)
+  @IsJSONValue()
   @IsOptional()
-  @Field(() => ScheduleUpdateManyWithoutVideosInput, {
+  @Field(() => GraphQLJSON, {
     nullable: true,
   })
-  schedules?: ScheduleUpdateManyWithoutVideosInput;
+  schedules?: InputJsonValue;
 
   @ApiProperty({
     required: false,
@@ -96,18 +91,6 @@ class VideoUpdateInput {
     nullable: true,
   })
   title?: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  user?: UserWhereUniqueInput | null;
 }
 
 export { VideoUpdateInput as VideoUpdateInput };

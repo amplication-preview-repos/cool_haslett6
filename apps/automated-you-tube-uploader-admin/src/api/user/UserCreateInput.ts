@@ -1,5 +1,4 @@
 import { InputJsonValue } from "../../types";
-import { VideoCreateNestedManyWithoutUsersInput } from "./VideoCreateNestedManyWithoutUsersInput";
 
 export type UserCreateInput = {
   email?: string | null;
@@ -8,5 +7,5 @@ export type UserCreateInput = {
   password: string;
   roles: InputJsonValue;
   username: string;
-  videos?: VideoCreateNestedManyWithoutUsersInput;
+  videos?: InputJsonValue;
 };

@@ -1,6 +1,6 @@
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { StringFilter } from "../../util/StringFilter";
-import { VideoListRelationFilter } from "../video/VideoListRelationFilter";
+import { JsonFilter } from "../../util/JsonFilter";
 
 export type UserWhereInput = {
   email?: StringNullableFilter;
@@ -8,5 +8,5 @@ export type UserWhereInput = {
   id?: StringFilter;
   lastName?: StringNullableFilter;
   username?: StringFilter;
-  videos?: VideoListRelationFilter;
+  videos?: JsonFilter;
 };

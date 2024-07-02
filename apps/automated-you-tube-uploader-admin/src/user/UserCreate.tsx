@@ -7,10 +7,8 @@ import {
   TextInput,
   PasswordInput,
   SelectArrayInput,
-  ReferenceArrayInput,
 } from "react-admin";
 
-import { VideoTitle } from "../video/VideoTitle";
 import { ROLES_OPTIONS } from "../user/RolesOptions";
 
 export const UserCreate = (props: CreateProps): React.ReactElement => {
@@ -28,14 +26,7 @@ export const UserCreate = (props: CreateProps): React.ReactElement => {
           optionValue="value"
         />
         <TextInput label="Username" source="username" />
-        <ReferenceArrayInput
-          source="videos"
-          reference="Video"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={VideoTitle} />
-        </ReferenceArrayInput>
+        <div />
       </SimpleForm>
     </Create>
   );

@@ -16,16 +16,13 @@ import {
   IsString,
   MaxLength,
   IsOptional,
-  ValidateNested,
   IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
-import { Schedule } from "../../schedule/base/Schedule";
 import { EnumVideoStatus } from "./EnumVideoStatus";
-import { User } from "../../user/base/User";
 
 @ObjectType()
 class Video {
@@ -80,12 +77,13 @@ class Video {
 
   @ApiProperty({
     required: false,
-    type: () => [Schedule],
   })
-  @ValidateNested()
-  @Type(() => Schedule)
+  @IsJSONValue()
   @IsOptional()
-  schedules?: Array<Schedule>;
+  @Field(() => GraphQLJSON, {
+    nullable: true,
+  })
+  schedules!: JsonValue;
 
   @ApiProperty({
     required: false,
@@ -117,15 +115,6 @@ class Video {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
-
-  @ApiProperty({
-    required: false,
-    type: () => User,
-  })
-  @ValidateNested()
-  @Type(() => User)
-  @IsOptional()
-  user?: User | null;
 }
 
 export { Video as Video };

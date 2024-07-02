@@ -26,9 +26,6 @@ import { VideoFindUniqueArgs } from "./VideoFindUniqueArgs";
 import { CreateVideoArgs } from "./CreateVideoArgs";
 import { UpdateVideoArgs } from "./UpdateVideoArgs";
 import { DeleteVideoArgs } from "./DeleteVideoArgs";
-import { ScheduleFindManyArgs } from "../../schedule/base/ScheduleFindManyArgs";
-import { Schedule } from "../../schedule/base/Schedule";
-import { User } from "../../user/base/User";
 import { CreateVideoDto } from "../CreateVideoDto";
 import { VideoService } from "../video.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
@@ -92,15 +89,7 @@ export class VideoResolverBase {
   async createVideo(@graphql.Args() args: CreateVideoArgs): Promise<Video> {
     return await this.service.createVideo({
       ...args,
-      data: {
-        ...args.data,
-
-        user: args.data.user
-          ? {
-              connect: args.data.user,
-            }
-          : undefined,
-      },
+      data: args.data,
     });
   }
 
@@ -117,15 +106,7 @@ export class VideoResolverBase {
     try {
       return await this.service.updateVideo({
         ...args,
-        data: {
-          ...args.data,
-
-          user: args.data.user
-            ? {
-                connect: args.data.user,
-              }
-            : undefined,
-        },
+        data: args.data,
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -156,45 +137,6 @@ export class VideoResolverBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Schedule], { name: "schedules" })
-  @nestAccessControl.UseRoles({
-    resource: "Schedule",
-    action: "read",
-    possession: "any",
-  })
-  async findSchedules(
-    @graphql.Parent() parent: Video,
-    @graphql.Args() args: ScheduleFindManyArgs
-  ): Promise<Schedule[]> {
-    const results = await this.service.findSchedules(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => User, {
-    nullable: true,
-    name: "user",
-  })
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
-  })
-  async getUser(@graphql.Parent() parent: Video): Promise<User | null> {
-    const result = await this.service.getUser(parent.id);
-
-    if (!result) {
-      return null;
-    }
-    return result;
   }
 
   @graphql.Query(() => [CreateVideoDto])

@@ -1,6 +1,4 @@
 import { JsonValue } from "type-fest";
-import { Schedule } from "../schedule/Schedule";
-import { User } from "../user/User";
 
 export type Video = {
   createdAt: Date;
@@ -8,9 +6,8 @@ export type Video = {
   filePath: JsonValue;
   id: string;
   scheduledTime: Date | null;
-  schedules?: Array<Schedule>;
+  schedules: JsonValue;
   status?: "Option1" | null;
   title: string | null;
   updatedAt: Date;
-  user?: User | null;
 };

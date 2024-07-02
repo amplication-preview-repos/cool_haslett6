@@ -13,13 +13,11 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested, IsEnum } from "class-validator";
+import { IsOptional, IsEnum } from "class-validator";
 import { JsonFilter } from "../../util/JsonFilter";
 import { StringFilter } from "../../util/StringFilter";
 import { DateTimeNullableFilter } from "../../util/DateTimeNullableFilter";
-import { ScheduleListRelationFilter } from "../../schedule/base/ScheduleListRelationFilter";
 import { EnumVideoStatus } from "./EnumVideoStatus";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 
 @InputType()
 class VideoWhereInput {
@@ -69,15 +67,14 @@ class VideoWhereInput {
 
   @ApiProperty({
     required: false,
-    type: () => ScheduleListRelationFilter,
+    type: JsonFilter,
   })
-  @ValidateNested()
-  @Type(() => ScheduleListRelationFilter)
+  @Type(() => JsonFilter)
   @IsOptional()
-  @Field(() => ScheduleListRelationFilter, {
+  @Field(() => JsonFilter, {
     nullable: true,
   })
-  schedules?: ScheduleListRelationFilter;
+  schedules?: JsonFilter;
 
   @ApiProperty({
     required: false,
@@ -100,18 +97,6 @@ class VideoWhereInput {
     nullable: true,
   })
   title?: StringNullableFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  user?: UserWhereUniqueInput;
 }
 
 export { VideoWhereInput as VideoWhereInput };

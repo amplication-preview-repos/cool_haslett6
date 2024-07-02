@@ -26,9 +26,6 @@ import { User } from "./User";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserUpdateInput } from "./UserUpdateInput";
-import { VideoFindManyArgs } from "../../video/base/VideoFindManyArgs";
-import { Video } from "../../video/base/Video";
-import { VideoWhereUniqueInput } from "../../video/base/VideoWhereUniqueInput";
 import { RegisterUserDto } from "../RegisterUserDto";
 import { LoginUserDto } from "../LoginUserDto";
 
@@ -62,6 +59,7 @@ export class UserControllerBase {
         roles: true,
         updatedAt: true,
         username: true,
+        videos: true,
       },
     });
   }
@@ -91,6 +89,7 @@ export class UserControllerBase {
         roles: true,
         updatedAt: true,
         username: true,
+        videos: true,
       },
     });
   }
@@ -121,6 +120,7 @@ export class UserControllerBase {
         roles: true,
         updatedAt: true,
         username: true,
+        videos: true,
       },
     });
     if (result === null) {
@@ -160,6 +160,7 @@ export class UserControllerBase {
           roles: true,
           updatedAt: true,
           username: true,
+          videos: true,
         },
       });
     } catch (error) {
@@ -198,6 +199,7 @@ export class UserControllerBase {
           roles: true,
           updatedAt: true,
           username: true,
+          videos: true,
         },
       });
     } catch (error) {
@@ -208,112 +210,6 @@ export class UserControllerBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @common.Get("/:id/videos")
-  @ApiNestedQuery(VideoFindManyArgs)
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "read",
-    possession: "any",
-  })
-  async findVideos(
-    @common.Req() request: Request,
-    @common.Param() params: UserWhereUniqueInput
-  ): Promise<Video[]> {
-    const query = plainToClass(VideoFindManyArgs, request.query);
-    const results = await this.service.findVideos(params.id, {
-      ...query,
-      select: {
-        createdAt: true,
-        description: true,
-        filePath: true,
-        id: true,
-        scheduledTime: true,
-        status: true,
-        title: true,
-        updatedAt: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @common.Post("/:id/videos")
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "update",
-    possession: "any",
-  })
-  async connectVideos(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        connect: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Patch("/:id/videos")
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "update",
-    possession: "any",
-  })
-  async updateVideos(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        set: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Delete("/:id/videos")
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "update",
-    possession: "any",
-  })
-  async disconnectVideos(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        disconnect: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
   }
 
   @common.Post("/auth/login")

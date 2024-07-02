@@ -1,5 +1,4 @@
 import { InputJsonValue } from "../../types";
-import { VideoUpdateManyWithoutUsersInput } from "./VideoUpdateManyWithoutUsersInput";
 
 export type UserUpdateInput = {
   email?: string | null;
@@ -8,5 +7,5 @@ export type UserUpdateInput = {
   password?: string;
   roles?: InputJsonValue;
   username?: string;
-  videos?: VideoUpdateManyWithoutUsersInput;
+  videos?: InputJsonValue;
 };
